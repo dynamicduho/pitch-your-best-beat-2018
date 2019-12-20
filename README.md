@@ -1,5 +1,5 @@
 # pybb
-An interactive teaching tool that demonstrates the Gr. 11 Physics concept of Frequency Beats through a user-determined sound app, interactive quiz, and investigations!
+An interactive teaching tool that demonstrates the Gr. 11 Physics concept of Frequency Beats through a user-determined sound app, interactive quiz, and investigations! Independent final project for Grade 11 Computer Science during E-Learn Summer School.
 
 The program is intuitive and requires a mouse, keyboard, and speakers, as well as a .jar reader.
 

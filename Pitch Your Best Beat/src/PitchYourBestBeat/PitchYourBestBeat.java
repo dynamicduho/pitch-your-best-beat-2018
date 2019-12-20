@@ -1,0 +1,1217 @@
+/*
+ * Name: Joshua D. Kim
+ * Date: August 22th, 2018
+ * Title: Pitch your best beat!
+ * Purpose: Demonstrate to gr. 11 physics students the concept of beat frequency
+ * using an original program that allows the user to play two notes simultaneously to create a beat frequency 
+ */
+package PitchYourBestBeat;
+
+/**
+ *
+ * @author user
+ */
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.SourceDataLine;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+public class PitchYourBestBeat extends javax.swing.JFrame {
+
+    //arraylist global as to store values when a private void method, btnLoadActionPrfmed, calls it
+   ArrayList <String> inputLog = new ArrayList();
+   //variable for holding the inputted hertz
+    int intInput;
+    int intStandard = 440;//holds the standard frequency
+    /**
+     * Creates new form PitchYourBestBeat
+     */
+    public PitchYourBestBeat() {
+        initComponents();
+        //make sure students can't troll
+        txtReview.setEditable(false);
+        txtContent2.setEditable (false);
+        txtContent3.setEditable (false);
+         txtInfo.setEditable (false);
+         txtImages.setEditable (false);
+         txtJava.setEditable (false);
+
+        
+        //sets the buttons to stop from the beginning
+        btnStandardStop.setSelected(true);
+        btnInputStop.setSelected(true);
+
+
+
+    }
+//method coutesy of StackOverflow @bojanv55, edited to match this program
+ 
+  public  void play(int intInput,int intDuration, boolean playSelected) throws LineUnavailableException {
+ 
+    byte[] buf = new byte[2];
+    int sampleRate = 22050; //44100 sample points per 1 second
+    AudioFormat af = new AudioFormat((float) sampleRate, 16, 1, true, false);
+    SourceDataLine sdl = AudioSystem.getSourceDataLine(af);
+    
+    sdl.open();
+    sdl.start();
+    int durationMs = intDuration;//play note specified duration
+    
+    //if button selected
+   if (playSelected==true) {
+       while (playSelected==true) {
+     this.lblStatus.setText("Status: Playing"); //let the user know
+//code from stackoverflow i somewhat understand, using trig functions to find the freuqneyc
+     for (int i = 0; i < durationMs * (float) 44100 / 1000;i++){
+      float samplesSine = (float) sampleRate / intInput;
+      double angle = i / (samplesSine/ 2.0) * Math.PI;  // /divide with 2 since sin goes 0PI to 2PI
+      short a = (short) (Math.sin(angle) * 32767);  //32767 - max value for sample to take (-32767 to 32767)
+      buf[0] = (byte) (a & 0xFF); //write 8bits ________WWWWWWWW out of 16
+      buf[1] = (byte) (a >> 8); //write 8bits WWWWWWWW________ out of 16
+      sdl.write(buf, 0, 2);
+    }
+     
+     playSelected=false;//stops once for loop finishes
+     this.lblStatus.setText("Status: Stopped");
+    }
+       
+   }
+   else {
+       sdl.stop();
+
+   }
+    sdl.drain();
+    sdl.stop();
+  }
+    
+    
+/*
+  *the following code will be implemented to improve the program later
+    *
+    */
+    
+    
+////method courtesy of StackOverflow @trashgod https://stackoverflow.com/questions/2064066/does-java-have-built-in-libraries-for-audio-synthesis/2065693#2065693
+//    private static void play(SourceDataLine line, Note note, int seconds) {
+//        seconds = Math.min(seconds, Note.SECONDS );
+//        int length = Note.SAMPLE_RATE * seconds;
+//        int count = line.write(note.data(), 0, length);
+//    }
+////method courtesy of StackOverflow @trashgod https://stackoverflow.com/questions/2064066/does-java-have-built-in-libraries-for-audio-synthesis/2065693#2065693
+//enum Note {
+//
+//    REST, A1, A1$, B5, C1, C1$, D1, D1$, E1, F1, F1$, G1, G4$, A5;
+//    public static final int SAMPLE_RATE = 16 * 1024; // ~16KHz
+//    public static final int SECONDS = 2;
+//    private byte[] sin = new byte[SECONDS * SAMPLE_RATE];
+//
+//    Note() {
+//        int n = this.ordinal();
+//        if (n > 0) {
+//            double exp = ((double) n - 1) / 12d;
+//            double f = 440d * Math.pow(2d, exp);
+//            for (int i = 0; i < sin.length; i++) {
+//                double period = (double)SAMPLE_RATE / f;
+//                double angle = 2.0 * Math.PI * i / period;
+//                sin[i] = (byte)(Math.sin(angle) * 127f);
+//            }
+//        }
+//    }
+//
+//    public byte[] data() {
+//        return sin;
+//    }
+//}  private static void play(SourceDataLine line, Note note, int seconds) {
+//        seconds = Math.min(seconds, Note.SECONDS );
+//        int length = Note.SAMPLE_RATE * seconds;
+//        int count = line.write(note.data(), 0, length);
+//    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        grpStandard = new javax.swing.ButtonGroup();
+        grpInput = new javax.swing.ButtonGroup();
+        grpQ1 = new javax.swing.ButtonGroup();
+        grpQ2 = new javax.swing.ButtonGroup();
+        grpQ3 = new javax.swing.ButtonGroup();
+        grpQ4 = new javax.swing.ButtonGroup();
+        grpQ5 = new javax.swing.ButtonGroup();
+        pnlMain = new javax.swing.JPanel();
+        pnlTabbedMain = new javax.swing.JTabbedPane();
+        pnlIntroduction = new javax.swing.JPanel();
+        pnlIntro = new javax.swing.JPanel();
+        lblTitle = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
+        lblIntroImage = new javax.swing.JLabel();
+        pnlLesson = new javax.swing.JPanel();
+        pblTabbedLesson = new javax.swing.JTabbedPane();
+        pnlContent1 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        txtReview = new javax.swing.JTextArea();
+        jLabel23 = new javax.swing.JLabel();
+        jLabel24 = new javax.swing.JLabel();
+        pnlContent2 = new javax.swing.JPanel();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        txtContent2 = new javax.swing.JTextArea();
+        pnlContent3 = new javax.swing.JPanel();
+        jScrollPane7 = new javax.swing.JScrollPane();
+        txtContent3 = new javax.swing.JTextArea();
+        pnlInvestigation = new javax.swing.JPanel();
+        lblSubtitle = new javax.swing.JLabel();
+        txtInput = new javax.swing.JTextField();
+        btnLoad = new javax.swing.JButton();
+        btnStandardPlay = new javax.swing.JRadioButton();
+        btnStandardStop = new javax.swing.JRadioButton();
+        btnInputPlay = new javax.swing.JRadioButton();
+        btnInputStop = new javax.swing.JRadioButton();
+        lblInput = new javax.swing.JLabel();
+        lblBeat = new javax.swing.JLabel();
+        lblStandard = new javax.swing.JLabel();
+        logFrequencies = new javax.swing.JScrollPane();
+        txtLog = new javax.swing.JTextArea();
+        lblTitle1 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        lblStatus = new javax.swing.JLabel();
+        btnA5d = new javax.swing.JPanel();
+        jLabel15 = new javax.swing.JLabel();
+        jLabel16 = new javax.swing.JLabel();
+        jLabel17 = new javax.swing.JLabel();
+        jLabel18 = new javax.swing.JLabel();
+        jLabel19 = new javax.swing.JLabel();
+        btnA4a = new javax.swing.JRadioButton();
+        btnA4b = new javax.swing.JRadioButton();
+        btnA4c = new javax.swing.JRadioButton();
+        btnA4d = new javax.swing.JRadioButton();
+        jLabel20 = new javax.swing.JLabel();
+        btnA5a = new javax.swing.JRadioButton();
+        btnA5b = new javax.swing.JRadioButton();
+        btnA5c = new javax.swing.JRadioButton();
+        btnA5D = new javax.swing.JRadioButton();
+        btnSubmit = new javax.swing.JButton();
+        lblScore = new javax.swing.JLabel();
+        lblIncorrect = new javax.swing.JLabel();
+        txtA1 = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        txtA2 = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        txtA3 = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        lblError = new javax.swing.JLabel();
+        pnlSources = new javax.swing.JPanel();
+        jTabbedPane3 = new javax.swing.JTabbedPane();
+        jPanel8 = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        txtImages = new javax.swing.JTextArea();
+        jPanel9 = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        txtInfo = new javax.swing.JTextArea();
+        jPanel10 = new javax.swing.JPanel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        txtJava = new javax.swing.JTextArea();
+        mnubar = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jMenu2 = new javax.swing.JMenu();
+        jMenu3 = new javax.swing.JMenu();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        lblTitle.setFont(new java.awt.Font("Tw Cen MT Condensed", 0, 36)); // NOI18N
+        lblTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblTitle.setText("Pitch Your Best Beat!");
+
+        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel7.setText("Welcome to the pitch your best beat program by Joshua Kim! Fullscreen is suggested to get the best experience.");
+
+        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel8.setText("This program will explain Beat Frequencies in detail and include a demo that you can tinker with!");
+
+        jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel9.setText("In order to understand the concept of beat frequency, you will need to recall the concepts of ");
+
+        jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel10.setText("waves, frequencies, and constructive/destructive interference.");
+
+        jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel11.setText("If you're ready to get started, click on the Lesson tab above!");
+
+        jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel12.setText("To report any problems/bugs with the program, please email Joshua Kim");
+
+        jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel13.setText("at joshua.kim@gmail.com with the subject \"PITCH YOUR BEST BEAT - BUG/ERROR\".");
+
+        jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel14.setText("Build 9001 Ver. SS4 (Last updated August 22nd, 2018)");
+
+        lblIntroImage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblIntroImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PitchYourBestBeat/Images/harmonic sound waves.png"))); // NOI18N
+
+        javax.swing.GroupLayout pnlIntroLayout = new javax.swing.GroupLayout(pnlIntro);
+        pnlIntro.setLayout(pnlIntroLayout);
+        pnlIntroLayout.setHorizontalGroup(
+            pnlIntroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlIntroLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pnlIntroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblIntroImage, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlIntroLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lblTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 1273, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        pnlIntroLayout.setVerticalGroup(
+            pnlIntroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlIntroLayout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addComponent(lblTitle)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel8)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel9)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel10)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblIntroImage)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel11)
+                .addGap(31, 31, 31)
+                .addComponent(jLabel12)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel13)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel14)
+                .addContainerGap())
+        );
+
+        javax.swing.GroupLayout pnlIntroductionLayout = new javax.swing.GroupLayout(pnlIntroduction);
+        pnlIntroduction.setLayout(pnlIntroductionLayout);
+        pnlIntroductionLayout.setHorizontalGroup(
+            pnlIntroductionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlIntroductionLayout.createSequentialGroup()
+                .addComponent(pnlIntro, javax.swing.GroupLayout.PREFERRED_SIZE, 1283, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 366, Short.MAX_VALUE))
+        );
+        pnlIntroductionLayout.setVerticalGroup(
+            pnlIntroductionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(pnlIntro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        pnlTabbedMain.addTab("Introduction", pnlIntroduction);
+
+        txtReview.setColumns(20);
+        txtReview.setRows(5);
+        txtReview.setText("Review:\t\n- Wave interference is a phenonmenon that occurs when two waves meet when travelling in the same medium.\n- Wave interference can be either constructive or destructive:\n\nConstructive interference:\n\t- Results in a pulse that has a higher amplitude than the two original frequencies.\n\t- Occurs when two frequencies' amplitudes are displaced in the same direction (i.e. upwards-upwards, downwards-downwards.)\n\t- Using two frequencies with the same amplitude, same frequency, and equal phase, if they encounter each other from opposite\n\tdirections, then the amplitude will double as the two frequencies build (construct) upon each other.\n\t- example: two people shouting\n\nDestructive interference:\n\t- Results in a pulse that has a lower amplitude than the two original frequencies.\n\t- Occurs when two frequencies' amplitudes are displaced in opposite directions (i.e. upwards-downwards, v.v.)\n\t- Using two frequencies with the same amplitude, same frequency, but 1/2 cycle out of phase, if they encounter each other \n\tfrom opposite longitudinal directions, then the amplitude will cancel out (effectively zero) as the two frequencies cancel \n\teach other.\n\t- Example: noise cancelling headphones\n");
+        jScrollPane1.setViewportView(txtReview);
+
+        jLabel23.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PitchYourBestBeat/Images/200px-Constructive_interference.svg.png"))); // NOI18N
+        jLabel23.setText("Constructive intereference");
+
+        jLabel24.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PitchYourBestBeat/Images/Untitled.png"))); // NOI18N
+        jLabel24.setText("Destructive Interference");
+
+        javax.swing.GroupLayout pnlContent1Layout = new javax.swing.GroupLayout(pnlContent1);
+        pnlContent1.setLayout(pnlContent1Layout);
+        pnlContent1Layout.setHorizontalGroup(
+            pnlContent1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlContent1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pnlContent1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlContent1Layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(jLabel23)
+                        .addGap(63, 63, 63)
+                        .addComponent(jLabel24))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1122, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(512, Short.MAX_VALUE))
+        );
+        pnlContent1Layout.setVerticalGroup(
+            pnlContent1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlContent1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 356, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlContent1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel23)
+                    .addComponent(jLabel24))
+                .addContainerGap(32, Short.MAX_VALUE))
+        );
+
+        pblTabbedLesson.addTab("Review", pnlContent1);
+
+        txtContent2.setColumns(20);
+        txtContent2.setRows(5);
+        txtContent2.setText("Beat Frequencies:\n\nBeat frequencies occur when two or more frequencies with a different frequency are sounded(for \nyour understanding's sake, the 11U course will only involve beat frequencies with 2 notes).\n\nBeat frequencies occur due to both constructive and deswtructive interference. When two\nfrequencies have a similar, but different frequencies, they are automatically out of phase with\neach other. This results in alternating periods of constructive interference and destructive\ninterference. The result of the blending of the two frequencies is a new beat frequency with an\naudible frequency that is equal to the absolute value of the difference between the two frequenc-\nies, given by the equation: \n\nfb  = |f2−f1|\nwhere fb represents the beat frequency, f2 represents the larger frequency, f1 represents the\nsmaller frequency, and || is absolute value.\n\nFor example, the beat frequency between 220Hz and 222Hz would be |222Hz−220Hz| = 2Hz.\n\nBeat frequencies are most commonly heard when the absoulute value of the difference between the \ntwo frequencies is small, e.g. 3Hz, since they are easier to discern by their slower \"wub-wub\" \nsound. A beat frequency equal to that of a regular note (e.g. 256Hz - middle C) will sound like\na regular note.\n\nWhen the two notes sounded are an octave, for example 440Hz and 880Hz, then the beat frequency is\n880Hz - 440Hz = 440Hz.");
+        jScrollPane5.setViewportView(txtContent2);
+
+        javax.swing.GroupLayout pnlContent2Layout = new javax.swing.GroupLayout(pnlContent2);
+        pnlContent2.setLayout(pnlContent2Layout);
+        pnlContent2Layout.setHorizontalGroup(
+            pnlContent2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlContent2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 782, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        pnlContent2Layout.setVerticalGroup(
+            pnlContent2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlContent2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 476, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(158, Short.MAX_VALUE))
+        );
+
+        pblTabbedLesson.addTab("Content", pnlContent2);
+
+        txtContent3.setColumns(20);
+        txtContent3.setRows(5);
+        txtContent3.setText("There are many applications of beat frequencies, some which you may not have realized!\nThe most widely used application is in acoustics, where musicians will use the beat frequency\nto tune their instruments. The lower the beat frequency, the more in tune the musician. This is\nespecially useful for guitars where there are multiple strings, hence if one string is in tune,\nthe other strings can be tuned using that one string as a reference.\n \nFollow this link to see a video demonstrating this:\nhttps://www.youtube.com/watch?v=srNqPEJJCLU\n\nAnother application of beat frequency is in harmony. When two notes that are a fifth apart,\nrepresenting a ratio of 3:2, for example A (440Hz) to E (660Hz), there is a beat frequency of\n22Hz that is produced, which is an A220Hz, an octave below A440Hz. This produces what is known \nas the \"missing fundamental\" and is what produces the pleasant sound of a harmonic. In fact,\nwhen two notes are played simultaneously, this third lower note is also audible, but blends in\nto enhance the quality of sound. Try it out for yourself in the investigation!\nFirst, play 440Hz. Then, 660Hz. Then play 220Hz. Then play 440Hz and 660Hz simultaneously and \nlisten carefully for the missing fundamental.");
+        jScrollPane7.setViewportView(txtContent3);
+
+        javax.swing.GroupLayout pnlContent3Layout = new javax.swing.GroupLayout(pnlContent3);
+        pnlContent3.setLayout(pnlContent3Layout);
+        pnlContent3Layout.setHorizontalGroup(
+            pnlContent3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlContent3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 782, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        pnlContent3Layout.setVerticalGroup(
+            pnlContent3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlContent3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 347, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(287, Short.MAX_VALUE))
+        );
+
+        pblTabbedLesson.addTab("Application", pnlContent3);
+
+        javax.swing.GroupLayout pnlLessonLayout = new javax.swing.GroupLayout(pnlLesson);
+        pnlLesson.setLayout(pnlLessonLayout);
+        pnlLessonLayout.setHorizontalGroup(
+            pnlLessonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(pblTabbedLesson)
+        );
+        pnlLessonLayout.setVerticalGroup(
+            pnlLessonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(pblTabbedLesson, javax.swing.GroupLayout.Alignment.TRAILING)
+        );
+
+        pnlTabbedMain.addTab("Lesson", pnlLesson);
+
+        lblSubtitle.setText("Standard Frequency:");
+
+        txtInput.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtInputActionPerformed(evt);
+            }
+        });
+
+        btnLoad.setText("Log");
+        btnLoad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLoadActionPerformed(evt);
+            }
+        });
+
+        grpStandard.add(btnStandardPlay);
+        btnStandardPlay.setText("Play");
+        btnStandardPlay.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnStandardPlayActionPerformed(evt);
+            }
+        });
+
+        grpStandard.add(btnStandardStop);
+        btnStandardStop.setText("Stop");
+        btnStandardStop.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnStandardStopActionPerformed(evt);
+            }
+        });
+
+        grpInput.add(btnInputPlay);
+        btnInputPlay.setText("Play");
+        btnInputPlay.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInputPlayActionPerformed(evt);
+            }
+        });
+
+        grpInput.add(btnInputStop);
+        btnInputStop.setText("Stop");
+        btnInputStop.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInputStopActionPerformed(evt);
+            }
+        });
+
+        lblInput.setText("User Input (Hz): ");
+
+        lblBeat.setText("Beat Frequency:");
+
+        lblStandard.setText("Standard (Hz): 440Hz");
+
+        txtLog.setColumns(20);
+        txtLog.setRows(5);
+        txtLog.setText("LOG OF BEATS:\n\n");
+        logFrequencies.setViewportView(txtLog);
+
+        lblTitle1.setFont(new java.awt.Font("Tw Cen MT Condensed", 0, 36)); // NOI18N
+        lblTitle1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblTitle1.setText("Pitch Your Best Beat!");
+
+        jLabel4.setText("Input Hz:");
+
+        jLabel5.setText("NOTE: Stop function not supported yet; press play only once and wait until sound completes before testing another frequency. Will be updated.");
+
+        lblStatus.setText("Status: ");
+
+        javax.swing.GroupLayout pnlInvestigationLayout = new javax.swing.GroupLayout(pnlInvestigation);
+        pnlInvestigation.setLayout(pnlInvestigationLayout);
+        pnlInvestigationLayout.setHorizontalGroup(
+            pnlInvestigationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlInvestigationLayout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addGroup(pnlInvestigationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(pnlInvestigationLayout.createSequentialGroup()
+                        .addGroup(pnlInvestigationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(pnlInvestigationLayout.createSequentialGroup()
+                                .addGap(130, 130, 130)
+                                .addGroup(pnlInvestigationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblBeat)
+                                    .addComponent(logFrequencies, javax.swing.GroupLayout.PREFERRED_SIZE, 479, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(pnlInvestigationLayout.createSequentialGroup()
+                                .addGroup(pnlInvestigationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btnStandardPlay)
+                                    .addComponent(btnStandardStop)
+                                    .addComponent(lblStandard)
+                                    .addComponent(lblSubtitle))
+                                .addGroup(pnlInvestigationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlInvestigationLayout.createSequentialGroup()
+                                        .addComponent(jLabel4)
+                                        .addGap(46, 46, 46))
+                                    .addGroup(pnlInvestigationLayout.createSequentialGroup()
+                                        .addGap(355, 355, 355)
+                                        .addGroup(pnlInvestigationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(lblStatus)
+                                            .addComponent(lblInput, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                        .addGroup(pnlInvestigationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnInputPlay)
+                            .addComponent(btnInputStop)
+                            .addComponent(btnLoad)
+                            .addComponent(txtInput, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(110, 110, 110))
+                    .addGroup(pnlInvestigationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel5)
+                        .addComponent(lblTitle1, javax.swing.GroupLayout.PREFERRED_SIZE, 780, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(0, 821, Short.MAX_VALUE))
+        );
+        pnlInvestigationLayout.setVerticalGroup(
+            pnlInvestigationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlInvestigationLayout.createSequentialGroup()
+                .addComponent(lblTitle1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
+                .addComponent(jLabel5)
+                .addGap(18, 18, 18)
+                .addGroup(pnlInvestigationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lblInput)
+                    .addGroup(pnlInvestigationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(pnlInvestigationLayout.createSequentialGroup()
+                            .addGroup(pnlInvestigationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(pnlInvestigationLayout.createSequentialGroup()
+                                    .addComponent(lblSubtitle, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(btnStandardPlay))
+                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(btnStandardStop)
+                            .addGap(16, 16, 16)
+                            .addComponent(lblStandard))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlInvestigationLayout.createSequentialGroup()
+                            .addComponent(txtInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(btnLoad)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(btnInputPlay)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(btnInputStop))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlInvestigationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblBeat)
+                    .addComponent(lblStatus))
+                .addGap(23, 23, 23)
+                .addComponent(logFrequencies, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(202, Short.MAX_VALUE))
+        );
+
+        pnlTabbedMain.addTab("Investigation", pnlInvestigation);
+
+        jLabel15.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jLabel15.setText("Practice Questions");
+
+        jLabel16.setText("1.  A tuning fork of frequency 440 Hz is sounded at the same time as a guitar string. If 6 beats are heard in 3.0 seconds, what is a possible frequency of the guitar string? ");
+
+        jLabel17.setText("2. A tuning fork with a frequency of 220 Hz is sounded at the same time as a tuning fork with a frequency of 234 Hz. How many beats will be heard over a period of 3.0 seconds?");
+
+        jLabel18.setText("3. The beat frequency is 16Hz. If the frequency of the lower note is half the frequency of the higher note, what is the frequency of the lower note?");
+
+        jLabel19.setText("4. 4. How many beats are heard every second when a 386 Hz and a 389 Hz tuning fork are struck at the same time?");
+
+        grpQ4.add(btnA4a);
+        btnA4a.setText("3 Hz");
+        btnA4a.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton13ActionPerformed(evt);
+            }
+        });
+
+        grpQ4.add(btnA4b);
+        btnA4b.setText("6 Hz");
+        btnA4b.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnA4bActionPerformed(evt);
+            }
+        });
+
+        grpQ4.add(btnA4c);
+        btnA4c.setText("3 Beats");
+
+        grpQ4.add(btnA4d);
+        btnA4d.setText("6 Beats");
+
+        jLabel20.setText("5. Beat frequency is a phenomena cause by:");
+
+        grpQ5.add(btnA5a);
+        btnA5a.setText("Constructive Interference");
+        btnA5a.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton17ActionPerformed(evt);
+            }
+        });
+
+        grpQ5.add(btnA5b);
+        btnA5b.setText("Destructive Interference");
+
+        grpQ5.add(btnA5c);
+        btnA5c.setText("Difference in frequency");
+
+        grpQ5.add(btnA5D);
+        btnA5D.setText("All of the above");
+
+        btnSubmit.setText("Submit");
+        btnSubmit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSubmitActionPerformed(evt);
+            }
+        });
+
+        lblScore.setText("Score:");
+
+        lblIncorrect.setText("Incorrect Answers:");
+
+        txtA1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtA1ActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setText("Hertz");
+
+        txtA2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtA2ActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setText("Beats");
+
+        txtA3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtA3ActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setText("Hertz");
+
+        javax.swing.GroupLayout btnA5dLayout = new javax.swing.GroupLayout(btnA5d);
+        btnA5d.setLayout(btnA5dLayout);
+        btnA5dLayout.setHorizontalGroup(
+            btnA5dLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(btnA5dLayout.createSequentialGroup()
+                .addGroup(btnA5dLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(btnA5dLayout.createSequentialGroup()
+                        .addGap(26, 26, 26)
+                        .addComponent(jLabel15))
+                    .addGroup(btnA5dLayout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addGroup(btnA5dLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel20)
+                            .addGroup(btnA5dLayout.createSequentialGroup()
+                                .addComponent(btnSubmit)
+                                .addGap(18, 18, 18)
+                                .addComponent(lblError, javax.swing.GroupLayout.PREFERRED_SIZE, 312, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(btnA5dLayout.createSequentialGroup()
+                                .addGroup(btnA5dLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(lblScore, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addGroup(btnA5dLayout.createSequentialGroup()
+                                        .addComponent(btnA5a)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(btnA5b)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(btnA5c)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnA5D))
+                            .addComponent(lblIncorrect)))
+                    .addGroup(btnA5dLayout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addGroup(btnA5dLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel19)
+                            .addGroup(btnA5dLayout.createSequentialGroup()
+                                .addComponent(btnA4a)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnA4b)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnA4c)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnA4d))))
+                    .addGroup(btnA5dLayout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addGroup(btnA5dLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel16)
+                            .addGroup(btnA5dLayout.createSequentialGroup()
+                                .addComponent(txtA1, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel1))))
+                    .addGroup(btnA5dLayout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addGroup(btnA5dLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(btnA5dLayout.createSequentialGroup()
+                                .addComponent(txtA2, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel2))
+                            .addComponent(jLabel17)))
+                    .addGroup(btnA5dLayout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addGroup(btnA5dLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(btnA5dLayout.createSequentialGroup()
+                                .addComponent(txtA3, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel3))
+                            .addComponent(jLabel18))))
+                .addContainerGap(777, Short.MAX_VALUE))
+        );
+        btnA5dLayout.setVerticalGroup(
+            btnA5dLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(btnA5dLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel15)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel16)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(btnA5dLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtA1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
+                .addGap(44, 44, 44)
+                .addComponent(jLabel17)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(btnA5dLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtA2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
+                .addGap(44, 44, 44)
+                .addComponent(jLabel18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(btnA5dLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtA3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3))
+                .addGap(44, 44, 44)
+                .addComponent(jLabel19)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(btnA5dLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnA4a)
+                    .addComponent(btnA4b)
+                    .addComponent(btnA4c)
+                    .addComponent(btnA4d))
+                .addGap(40, 40, 40)
+                .addComponent(jLabel20)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(btnA5dLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnA5a)
+                    .addComponent(btnA5b)
+                    .addComponent(btnA5c)
+                    .addComponent(btnA5D))
+                .addGap(27, 27, 27)
+                .addGroup(btnA5dLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnSubmit)
+                    .addComponent(lblError, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(lblScore)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblIncorrect)
+                .addContainerGap(133, Short.MAX_VALUE))
+        );
+
+        pnlTabbedMain.addTab("Quiz", btnA5d);
+
+        txtImages.setColumns(20);
+        txtImages.setRows(5);
+        txtImages.setText("Intro page\nhttp://www.planetoftunes.com/sound-audio-theory/so_media/harmonics.gif\nFormula\nhttp://wi-tap.energy/wp-content/uploads/2016/07/formula.png\nBeat period\nhttp://ibphysicsstuff.wdfiles.com/local--files/beats/BeatFreq.jpg");
+        jScrollPane2.setViewportView(txtImages);
+
+        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
+        jPanel8.setLayout(jPanel8Layout);
+        jPanel8Layout.setHorizontalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1644, Short.MAX_VALUE)
+        );
+        jPanel8Layout.setVerticalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 645, Short.MAX_VALUE)
+        );
+
+        jTabbedPane3.addTab("Images", jPanel8);
+
+        txtInfo.setColumns(20);
+        txtInfo.setRows(5);
+        txtInfo.setText("All content written by Joshua Kim, with information from:\n\nhttp://lchs.lpsd.ca/eteacher_download/2112/38462");
+        jScrollPane3.setViewportView(txtInfo);
+
+        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
+        jPanel9.setLayout(jPanel9Layout);
+        jPanel9Layout.setHorizontalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 1644, Short.MAX_VALUE)
+        );
+        jPanel9Layout.setVerticalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 645, Short.MAX_VALUE)
+        );
+
+        jTabbedPane3.addTab("Information", jPanel9);
+
+        txtJava.setColumns(20);
+        txtJava.setRows(5);
+        txtJava.setText("Sound methods courtesy of StackOverflow @trashgod \nhttps://stackoverflow.com/questions/2064066/does-java-have-built-in-libraries-for-audio-synthesis/2065693#2065693\nThreads\nhttps://stackoverflow.com/questions/17013486/java-jlayer-application-freezes-while-playing-songhttp://jsresources.org/examples/OscillatorPlayer.html\n");
+        jScrollPane4.setViewportView(txtJava);
+
+        javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
+        jPanel10.setLayout(jPanel10Layout);
+        jPanel10Layout.setHorizontalGroup(
+            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 1644, Short.MAX_VALUE)
+        );
+        jPanel10Layout.setVerticalGroup(
+            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 645, Short.MAX_VALUE)
+        );
+
+        jTabbedPane3.addTab("Java", jPanel10);
+
+        javax.swing.GroupLayout pnlSourcesLayout = new javax.swing.GroupLayout(pnlSources);
+        pnlSources.setLayout(pnlSourcesLayout);
+        pnlSourcesLayout.setHorizontalGroup(
+            pnlSourcesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jTabbedPane3)
+        );
+        pnlSourcesLayout.setVerticalGroup(
+            pnlSourcesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jTabbedPane3)
+        );
+
+        pnlTabbedMain.addTab("Sources", pnlSources);
+
+        javax.swing.GroupLayout pnlMainLayout = new javax.swing.GroupLayout(pnlMain);
+        pnlMain.setLayout(pnlMainLayout);
+        pnlMainLayout.setHorizontalGroup(
+            pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlMainLayout.createSequentialGroup()
+                .addComponent(pnlTabbedMain, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+        pnlMainLayout.setVerticalGroup(
+            pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(pnlTabbedMain)
+        );
+
+        jMenu1.setText("File");
+        mnubar.add(jMenu1);
+
+        jMenu2.setText("Edit");
+        mnubar.add(jMenu2);
+
+        jMenu3.setText("Help");
+        mnubar.add(jMenu3);
+
+        setJMenuBar(mnubar);
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void jRadioButton17ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton17ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jRadioButton17ActionPerformed
+
+    private void jRadioButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton13ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jRadioButton13ActionPerformed
+
+    private void btnStandardPlayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStandardPlayActionPerformed
+    int intDuration = 10000; //play longer than input
+        boolean playSelected = true;
+      //new thread (from stackoverflow)
+        Thread t = new Thread (new Runnable()
+        {
+            public void run()
+            {    
+       try {
+           play(intStandard, intDuration, playSelected);
+       } catch (LineUnavailableException ex) {
+           Logger.getLogger(PitchYourBestBeat.class.getName()).log(Level.SEVERE, null, ex);
+       }
+            }
+        });
+        t.interrupt();   
+        t.start();       
+    }//GEN-LAST:event_btnStandardPlayActionPerformed
+
+    private void btnLoadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoadActionPerformed
+      //take input to int
+      intInput =  Integer.parseInt(this.txtInput.getText());
+      //add values to arraylist using input
+      inputLog.add("\nFrequency: "+ intInput + "Hz, Beat Frequency: " + (int)Math.abs(440-intInput)+"Hz");
+      
+      this.lblInput.setText ("User Input (Hz): " + intInput);
+      this.lblBeat.setText ("Beat Frequency: " + (int)Math.abs(440-intInput));
+      this.txtLog.setText ("LOG OF BEATS:" + inputLog);
+      
+
+      
+    }//GEN-LAST:event_btnLoadActionPerformed
+
+    private void txtInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtInputActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtInputActionPerformed
+
+    private void txtA1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtA1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtA1ActionPerformed
+
+    private void txtA2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtA2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtA2ActionPerformed
+
+    private void txtA3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtA3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtA3ActionPerformed
+
+    private void btnA4bActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnA4bActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnA4bActionPerformed
+
+    //checks if the correct answers were chosen
+    private void btnSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitActionPerformed
+        ArrayList <Integer> emptyFields = new ArrayList<Integer>();
+        ArrayList <Integer> wrongType = new ArrayList<Integer>();
+
+        //holds correct/wrong amounts
+        int intCorrect = 0;
+        int intIncorrect;
+
+        //question 1
+        //check if empty
+       if (this.txtA1.getText().isEmpty()){
+           emptyFields.add(1);//add to array of empty questions to be output to user
+       }
+       else if (!(this.txtA1.getText()).matches("[0-9]+") && (this.txtA1.getText()).length() > 0){
+           wrongType.add(1);
+       }
+       //check for correct answer
+        else if (Integer.parseInt(this.txtA1.getText()) == 442 || Integer.parseInt(this.txtA1.getText()) == 438 ){
+           intCorrect++;//add 1 to correct
+       }
+       else {
+        this.lblError.setText ("Try again!");//error message
+        }
+       
+       //question 2
+       if (this.txtA2.getText().isEmpty()){
+           emptyFields.add(2);// add number 2 is empty
+       }
+        else if (!(this.txtA2.getText()).matches("[0-9]+") && (this.txtA2.getText()).length() > 0){
+           wrongType.add(2);
+       }
+        else if (Integer.parseInt(this.txtA2.getText()) == 42 ){
+           intCorrect++;
+       }
+       else {
+        this.lblError.setText ("Try again!");
+        }
+       
+       //question 3
+       if (this.txtA3.getText().isEmpty()){
+           emptyFields.add(3);// add number 3 is empty
+       }
+        else if (!(this.txtA3.getText()).matches("[0-9]+") && (this.txtA3.getText()).length() > 0){
+           wrongType.add(3);
+       }
+        else if (Integer.parseInt(this.txtA3.getText()) == 16 ){
+           intCorrect++;
+       }
+       else {
+        this.lblError.setText ("Try again!");
+        }
+       
+       //question 4
+       //if none are selected
+       if (!btnA4a.isSelected()&& !btnA4b.isSelected() &&!btnA4c.isSelected()&& !btnA4d.isSelected() ){
+           emptyFields.add(4);// add number 4 is empty
+       }
+        else if (btnA4c.isSelected()){
+           intCorrect++;
+       }
+       else {
+        this.lblError.setText ("Try again!");
+        }
+       
+       //question 5
+       //if none are selected
+       if (!btnA5a.isSelected()&& !btnA5b.isSelected() &&!btnA5c.isSelected()&& !btnA5D.isSelected() ){
+           emptyFields.add(5);// add number 5 is empty
+       }
+        else if (btnA5D.isSelected()){
+           intCorrect++;
+       }
+       else {
+        this.lblError.setText ("Try again!");
+        }
+       
+       //finds # of incorrect based on correct
+       intIncorrect = 5-intCorrect;
+       
+       //sets the text to display amount correct/wrong but not which questions to increase difficulty and learning
+       this.lblScore.setText("Score: "+ intCorrect);
+       this.lblIncorrect.setText("Incorrect: "+ intIncorrect);
+       
+  //checks if there are any empty fields, wrong type, perfect, and if so displays error message
+       if (emptyFields.size()>0 && wrongType.size()>0){
+         this.lblError.setText("Questions " + emptyFields+ " are empty, and questions " + wrongType+" are not numbers.");
+
+       }
+       else if (emptyFields.size()>0){
+           this.lblError.setText("Questions " + emptyFields+ " are empty");
+       }
+       else if (wrongType.size()>0){
+          this.lblError.setText("Questions " + wrongType+" must be answered in numbers.");
+       }
+       else if (intCorrect == 5){
+         this.lblError.setText("Perfect!");
+
+       }
+    }//GEN-LAST:event_btnSubmitActionPerformed
+
+    private void btnInputPlayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInputPlayActionPerformed
+       
+    //get user input
+        int intDuration = 3000;//5 seconds
+        intInput =  Integer.parseInt(this.txtInput.getText());
+        boolean playSelected = true;
+      //new thread (from stackoverflow)
+        Thread t = new Thread (new Runnable()
+        {
+            public void run()
+            {    
+       try {
+           play(intInput, intDuration, playSelected);
+       } catch (LineUnavailableException ex) {
+           Logger.getLogger(PitchYourBestBeat.class.getName()).log(Level.SEVERE, null, ex);
+       }
+            }
+        });
+        t.interrupt();   
+        t.start();
+        
+
+    }//GEN-LAST:event_btnInputPlayActionPerformed
+
+//STOP FUNCTIONALITY WILL BE ADDED WHEN UPDATED
+
+    private void btnInputStopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInputStopActionPerformed
+  
+//STOP FUNCTIONALITY WILL BE ADDED WHEN UPDATED
+         //FUNCTIONALITY WILL BE ADDED WHEN UPDATED
+     
+    }//GEN-LAST:event_btnInputStopActionPerformed
+//STOP FUNCTIONALITY WILL BE ADDED WHEN UPDATED
+
+    private void btnStandardStopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStandardStopActionPerformed
+//STOP FUNCTIONALITY WILL BE ADDED WHEN UPDATED
+    }//GEN-LAST:event_btnStandardStopActionPerformed
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(PitchYourBestBeat.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(PitchYourBestBeat.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(PitchYourBestBeat.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(PitchYourBestBeat.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new PitchYourBestBeat().setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JRadioButton btnA4a;
+    private javax.swing.JRadioButton btnA4b;
+    private javax.swing.JRadioButton btnA4c;
+    private javax.swing.JRadioButton btnA4d;
+    private javax.swing.JRadioButton btnA5D;
+    private javax.swing.JRadioButton btnA5a;
+    private javax.swing.JRadioButton btnA5b;
+    private javax.swing.JRadioButton btnA5c;
+    private javax.swing.JPanel btnA5d;
+    private javax.swing.JRadioButton btnInputPlay;
+    private javax.swing.JRadioButton btnInputStop;
+    private javax.swing.JButton btnLoad;
+    private javax.swing.JRadioButton btnStandardPlay;
+    private javax.swing.JRadioButton btnStandardStop;
+    private javax.swing.JButton btnSubmit;
+    private javax.swing.ButtonGroup grpInput;
+    private javax.swing.ButtonGroup grpQ1;
+    private javax.swing.ButtonGroup grpQ2;
+    private javax.swing.ButtonGroup grpQ3;
+    private javax.swing.ButtonGroup grpQ4;
+    private javax.swing.ButtonGroup grpQ5;
+    private javax.swing.ButtonGroup grpStandard;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
+    private javax.swing.JPanel jPanel10;
+    private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane7;
+    private javax.swing.JTabbedPane jTabbedPane3;
+    private javax.swing.JLabel lblBeat;
+    private javax.swing.JLabel lblError;
+    private javax.swing.JLabel lblIncorrect;
+    private javax.swing.JLabel lblInput;
+    private javax.swing.JLabel lblIntroImage;
+    private javax.swing.JLabel lblScore;
+    private javax.swing.JLabel lblStandard;
+    private javax.swing.JLabel lblStatus;
+    private javax.swing.JLabel lblSubtitle;
+    private javax.swing.JLabel lblTitle;
+    private javax.swing.JLabel lblTitle1;
+    private javax.swing.JScrollPane logFrequencies;
+    private javax.swing.JMenuBar mnubar;
+    private javax.swing.JTabbedPane pblTabbedLesson;
+    private javax.swing.JPanel pnlContent1;
+    private javax.swing.JPanel pnlContent2;
+    private javax.swing.JPanel pnlContent3;
+    private javax.swing.JPanel pnlIntro;
+    private javax.swing.JPanel pnlIntroduction;
+    private javax.swing.JPanel pnlInvestigation;
+    private javax.swing.JPanel pnlLesson;
+    private javax.swing.JPanel pnlMain;
+    private javax.swing.JPanel pnlSources;
+    private javax.swing.JTabbedPane pnlTabbedMain;
+    private javax.swing.JTextField txtA1;
+    private javax.swing.JTextField txtA2;
+    private javax.swing.JTextField txtA3;
+    private javax.swing.JTextArea txtContent2;
+    private javax.swing.JTextArea txtContent3;
+    private javax.swing.JTextArea txtImages;
+    private javax.swing.JTextArea txtInfo;
+    private javax.swing.JTextField txtInput;
+    private javax.swing.JTextArea txtJava;
+    private javax.swing.JTextArea txtLog;
+    private javax.swing.JTextArea txtReview;
+    // End of variables declaration//GEN-END:variables
+}

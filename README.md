@@ -10,7 +10,8 @@ Access different content through the main tabs, and for the lesson, access sub-t
 PROGRAM OVERVIEW
 ------------------------------------------
 INTRODUCTION
-- Introduces the application
+- Introduces the application, with a diagram of harmonic frequencies.
+- Provides feedback information
 
 LESSON 
 (Access through subtabs)
